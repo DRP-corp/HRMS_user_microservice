@@ -6,7 +6,7 @@ import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { UsersResolver } from './users.resolver';
 import { UsersService } from './users.service';
-import { ApolloServerPluginInlineTrace } from '@apollo/server/plugin/inlineTrace';
+import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
 
 @Module({
   providers: [UsersResolver, UsersService],
@@ -14,7 +14,9 @@ import { ApolloServerPluginInlineTrace } from '@apollo/server/plugin/inlineTrace
     GraphQLModule.forRoot<ApolloFederationDriverConfig>({
       driver: ApolloFederationDriver,
       autoSchemaFile: true,
-      plugins: [ApolloServerPluginInlineTrace()],
+      playground: false,
+      plugins: [ ApolloServerPluginLandingPageLocalDefault(),],
+      
     }),
   ],
 })
