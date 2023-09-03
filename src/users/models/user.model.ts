@@ -1,11 +1,28 @@
-import { Directive, Field, ID, ObjectType } from '@nestjs/graphql';
-
+import { ObjectType, Field } from '@nestjs/graphql';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Document, Schema as MongooSchmea} from 'mongoose'
 @ObjectType()
-@Directive('@key(fields: "id")')
+@Schema()
 export class User {
-  @Field((type) => ID)
-  id: number;
+  @Field(()=> String)
+  _id: MongooSchmea.Types.ObjectId;
+
+  @Field(() => String)
+  @Prop()
+  userName: string;
 
   @Field()
-  name: string;
+  @Prop()
+  age: number;
+
+  @Field(() => String)
+  @Prop()
+  password: string;
+
+  @Field(() => String)
+  @Prop({ unique: true })
+  email: string;
 }
+
+export type UserDocument = User & Document;
+export const UserSchema = SchemaFactory.createForClass(User);

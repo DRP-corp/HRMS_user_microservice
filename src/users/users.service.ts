@@ -1,14 +1,20 @@
+import { Model } from 'mongoose';
 import { Injectable } from '@nestjs/common';
-import { User } from './models/user.model';
+import { InjectModel } from '@nestjs/mongoose';
+import { User, UserDocument } from './models/user.model';
+import { CreateUserInput } from './dtos/user_create.dto';
 
 @Injectable()
 export class UsersService {
-  private users: User[] = [
-    { id: 1, name: 'John Doe' },
-    { id: 2, name: 'Richard Roe' },
-  ];
+  constructor(
+    @InjectModel(User.name)
+    private userModel: Model<UserDocument>,
+  ) {}
 
-  findById(id: number): User {
-    return this.users.find((user) => user.id === Number(id));
+   createUser(createUserInput: CreateUserInput): User{
+    const createdUser = new this.userModel(createUserInput);
+    
+    createdUser.save()
+    return createdUser
   }
 }

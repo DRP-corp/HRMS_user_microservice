@@ -2,11 +2,13 @@ import {
   ApolloFederationDriver,
   ApolloFederationDriverConfig,
 } from '@nestjs/apollo';
+import { MongooseModule } from '@nestjs/mongoose';
 import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
+import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
 import { UsersResolver } from './users.resolver';
 import { UsersService } from './users.service';
-import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
+import { User, UserSchema } from './models/user.model';
 
 @Module({
   providers: [UsersResolver, UsersService],
@@ -15,9 +17,9 @@ import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin
       driver: ApolloFederationDriver,
       autoSchemaFile: true,
       playground: false,
-      plugins: [ ApolloServerPluginLandingPageLocalDefault(),],
-      
+      plugins: [ApolloServerPluginLandingPageLocalDefault(),],
     }),
+    MongooseModule.forFeature([{ name: User.name, schema: UserSchema, }])
   ],
 })
-export class UsersModule {}
+export class UsersModule { }
