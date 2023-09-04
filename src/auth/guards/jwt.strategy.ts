@@ -7,21 +7,17 @@ import { AuthService } from '../auth.service';
 // Adding guard stratergies
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-  constructor(private authService: AuthService) {
+  constructor(private authService: AuthService,) {
     super(
       {
         jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
         ignoreExpiration: false,
-        secretOrKey: 'quicksilver'
+        secretOrKey: process.env.JWT_SECRET_HASH
       }
     );
   }
 
-  async validate(username: string, password: string) {
-    const user = await this.authService.validateUser(username, password)
-    if (!user) {
-      throw new UnauthorizedException();
-    }
-    return user;
+  async validate(payload: any) {
+    return { userId: payload.sub, username: payload.username }
   }
 }

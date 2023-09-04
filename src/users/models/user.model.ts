@@ -4,6 +4,7 @@ import { Document, Schema as MongooSchmea} from 'mongoose'
 @ObjectType()
 @Schema()
 export class User {
+  // TODO model fields modeling
   @Field(()=> String)
   _id: MongooSchmea.Types.ObjectId;
 

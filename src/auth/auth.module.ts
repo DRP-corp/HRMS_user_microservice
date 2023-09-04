@@ -16,12 +16,12 @@ import { UsersService } from 'src/users/users.service';
 import { JwtModule } from '@nestjs/jwt';
 
 @Module({
-  providers: [UsersService, AuthService, AuthResolver, JwtStrategy, PassportModule,],
+  providers: [UsersService, AuthService, AuthResolver, JwtStrategy, PassportModule],
   imports: [
     JwtModule.registerAsync({
       useFactory:
         () => ({
-          secret: 'quicksilver',
+          secret: process.env.JWT_SECRET_HASH,
           signOptions: {
             expiresIn: '36000s'
           }
@@ -33,6 +33,9 @@ import { JwtModule } from '@nestjs/jwt';
       autoSchemaFile: true,
       playground: false,
       plugins: [ApolloServerPluginLandingPageLocalDefault(),],
-    }),]
+      
+    }),
+  ],
+  exports: [JwtStrategy]
 })
 export class AuthModule { }

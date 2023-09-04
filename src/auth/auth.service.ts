@@ -62,14 +62,13 @@ export class AuthService {
 
     async login(
         existingUser: LoginUserInput,
-    ): Promise<{ Token: string, user: UserDetails} | null> {
+    ): Promise<{ Token: string} | null> {
         const { username, password } = existingUser;
         const user = await this.validateUser(username, password);
 
         if (!user) return null;
-        const jwt = await this.jwtService.signAsync({ user });
-        console.log(jwt)
-        return { Token: jwt, user: user };
+        const jwt = await this.jwtService.signAsync({ username:  user.username,  user_id: user.id });
+        return { Token: jwt };
 
     }
 

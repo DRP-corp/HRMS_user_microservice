@@ -9,17 +9,13 @@ import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin
 import { UsersResolver } from './users.resolver';
 import { UsersService } from './users.service';
 import { User, UserSchema } from './models/user.model';
+import { AuthService } from '../auth/auth.service';
 
 @Module({
   providers: [UsersResolver, UsersService],
   imports: [
-    GraphQLModule.forRoot<ApolloFederationDriverConfig>({
-      driver: ApolloFederationDriver,
-      autoSchemaFile: true,
-      playground: false,
-      plugins: [ApolloServerPluginLandingPageLocalDefault(),],
-    }),
-    MongooseModule.forFeature([{ name: User.name, schema: UserSchema, }])
+    
+    MongooseModule.forFeature([{ name: User.name, schema: UserSchema, }]),
   ],
   exports: [UsersService]
 })
