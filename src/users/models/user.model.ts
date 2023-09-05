@@ -1,6 +1,7 @@
 import { ObjectType, Field } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, Schema as MongooSchmea} from 'mongoose'
+import { HydratedDocument, Schema as MongooSchmea} from 'mongoose'
+import { Role } from '../enums/roles';
 @ObjectType()
 @Schema()
 export class User {
@@ -12,9 +13,12 @@ export class User {
   @Prop()
   userName: string;
 
+  // TODO remove nullable 
+  // @Field({nullable: true})
+  // @Prop({required: false})
   @Field()
   @Prop()
-  age: number;
+  age?: number;
 
   @Field(() => String)
   @Prop()
@@ -23,7 +27,10 @@ export class User {
   @Field(() => String)
   @Prop({ unique: true })
   email: string;
+
+  @Prop({ type: String, enum: Role, default: Role.User })
+  role: Role
 }
 
-export type UserDocument = User & Document;
+export type UserDocument = HydratedDocument<User>;
 export const UserSchema = SchemaFactory.createForClass(User);
